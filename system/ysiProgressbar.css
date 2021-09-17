@@ -1,0 +1,22 @@
+/* YSI.NET progress bar */
+.progressbarOuter
+{
+	filter				: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#FFFFFF', EndColorStr='#919191');
+	text-align			: center;
+	padding				: 5px;
+	border-top			: 1px solid #999;
+	border-right		: 2px solid #555;
+	border-bottom		: 2px solid #555;
+	border-left			: 1px solid #999;
+	z-index				: 99999;
+}
+
+.progressbarImage
+{
+	margin				: 3px;
+}
+
+.progressbarCaption
+{
+	font-weight			: bold;
+}

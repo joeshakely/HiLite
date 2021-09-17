@@ -1,0 +1,126 @@
+/* fct.css - Styles for FCT's */
+
+/* *********** CONTAINER SECTIONS ************* */
+.FCTcontainer {
+	position:	relative;
+}
+
+.FCTnwHeadingsContainer, 
+.FCTwHeadingsContainer,
+.FCTswHeadingsContainer 
+ {
+	position:	relative;
+	margin:		0px;
+	padding:	0px;
+	overflow:	hidden;
+	clip:		rect( auto, auto, auto, auto);
+	float:		left;
+	clear:		both;
+}
+
+.FCTneHeadingsContainer, 
+.FCTeHeadingsContainer,
+.FCTseHeadingsContainer 
+ {
+	position:	relative;
+	margin:		0px;
+	padding:	0px;
+	overflow:	hidden;
+	clip:		rect( auto, auto, auto, auto);
+	float:		right;
+}
+
+.FCTnHeadingsContainer,
+.FCTmainContainer,
+.FCTsHeadingsContainer
+{
+	position:	relative;
+	margin:		0px;
+	padding:	0px;
+	clip:		rect( auto, auto, auto, auto); 
+	overflow:	hidden;
+}
+
+.FCTmainContainer {
+	overflow:	scroll;
+}
+
+/* ******************************************** */
+
+/* ************* HEADING SECTIONS ************* */
+.FCTnwHeadings,
+.FCTnHeadings,
+.FCTneHeadings,
+.FCTwHeadings,
+.FCTmain,
+.FCTeHeadings,
+.FCTswHeadings,
+.FCTsHeadings,
+.FCTseHeadings
+{
+	position:	absolute;
+	top:		0px;
+	left:		0px;
+	margin:		0px;
+	padding:	0px;
+}
+/* ******************************************** */
+
+/* *************** TABLE SECTIONS ************* */
+/* Let's give the user the decision as to how they'll look.
+.FCTnwHeadingsTable,
+.FCTnHeadingsTable,
+.FCTwHeadingsTable,
+.FCTmainTable
+{
+	border-spacing:	2px;
+	border-collapse: separate;
+	border:		1px #d6d3ce outset;
+	margin:		0px;
+
+}
+
+.FCTnwHeadingsTable,
+.FCTnHeadingsTable,
+.FCTwHeadingsTable
+{
+	background:	#e0e0e0;
+}
+*/
+/* ******************************************** */
+
+/* **************** CELL SECTIONS ************* */
+/*
+.FCTnwHeadingsTable th,
+.FCTnwHeadingsTable td,
+.FCTnHeadingsTable th,
+.FCTnHeadingsTable td,
+.FCTwHeadingsTable th,
+.FCTwHeadingsTable td,
+.FCTmainTable th,
+.FCTmainTable td
+{
+	overflow:	visible;
+	border:		1px #d6d3ce inset;
+
+}
+*/
+
+.FCTdivWrapper {
+	border:		none;
+	padding:		0px;
+	margin:		0px;
+	position:		relative;
+	top:			0px;
+	left:		0px;
+}
+
+.FCTvalignWrapper {
+	position:		relative;
+}
+
+.FCTmainTable td
+{
+	padding: 0px 4px 0px 0px;
+}
+/* ******************************************** */

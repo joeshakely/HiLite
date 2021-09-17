@@ -1,0 +1,1057 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">		<script language="JavaScript" type="text/javascript">
+    function attachEventHandler(el, eventType, listener, useCapture) {
+        if (el.addEventListener) {
+            el.addEventListener(eventType.replace("on", ""), listener, useCapture); 
+        } else if (el.attachEvent) {
+            el.attachEvent(eventType, listener);
+        }
+    }
+</script>
+<script language="JavaScript" type="text/javascript">
+    var __oldDoPostBack
+    
+    function redirectDoPostback()
+    {
+        if (typeof(__doPostBack) != "undefined")
+        {
+        // save a reference to the original __doPostBack
+        __oldDoPostBack = window.__doPostBack;
+        // replace __doPostBack with our own function
+        window.__doPostBack = ysiDoPostBack;
+     StartTimers();
+        }
+    }
+    
+    attachEventHandler(window, "onload", redirectDoPostback, false);
+</script>
+<script language="JavaScript" type="text/javascript">
+var timoutWarning = 1680000; 
+var timoutNow = 1800000; 
+function StartTimers() {
+    warningTimer = setTimeout("IdleWarning()", timoutWarning);
+}
+function IdleWarning() {
+    ShowWarningDialog();
+ TimeoutWarningTicker(119);
+}
+function ShowWarningDialog() {
+if (!$) { $ = window.jQuery; }
+$("#DefaultTimeoutDialog").dialog({
+resizable: false,
+height: 170,
+width : 280,
+modal: true,
+buttons: [
+             {
+             id: "TimeoutDialog-ok",
+             text: "OK",
+             click: function() {
+                 $(this).dialog("close");
+                 window.location.href = "/Pages/PageExpired.aspx";
+                 }
+             },
+             {
+             id: "TimeoutDialog-Close",
+             text: "Close",
+             click: function() {
+                 $(this).dialog("close");
+                 }
+             }
+     ]
+});
+$("#TimeoutDialog-ok").button("disable");
+}
+function TimeoutWarningTicker(count) {
+var d = document.getElementById('DefaultTimeoutDialog');
+      d.innerText = "Your page will expire in "+ count +" seconds due to inactivity.";
+if (count > 0) {
+ setTimeout("TimeoutWarningTicker(" + (count - 1) + ")", 1000);
+ }
+else 
+ {
+ d.innertext = "Your page has expired due to inactivity. You’ll be redirected to your home page!";
+ $("#TimeoutDialog-ok").button("enable");
+ }
+}
+</script>
+
+<HTML>
+    <HEAD><meta name='format-detection' content='telephone=no' />
+
+        <script language=javascript src="/system/jquery.js"></script>
+        
+        <script language=javascript src="/system/jquery-ui.js"></script>
+        
+        <script language=javascript src="/system/jquery.iframe.js"></script>
+        
+        <script language=javascript src="/system/jquery.dataTables.min.js"></script>
+        
+        <script language=javascript src="/system/datepicker2.js"></script>
+        <script language=javascript src="/system/ysilib2.js"></script>
+        <script language=javascript src="/system/ysilib.js"></script>
+        <script language=javascript src="/system/ysiJCommon.js"></script>
+        <script language=javascript src="/system/ysiValidation.js"></script>
+        <script language=javascript src="/system/ysiNetClient.js"></script>
+        
+        <script language=javascript src="/system/jquery.ui.timepicker.js"></script>
+        <LINK href="/system/BlueCinnamon.css" rel=stylesheet type="text/css">
+ 
+        <LINK href="/system/mmenu.css" rel=stylesheet type="text/css">
+ 
+        <LINK href="/system/jquery.ui.timepicker.css" rel=stylesheet type="text/css">
+        <LINK href="/system/ysiProgressbar.css" rel=stylesheet type="text/css">  
+        <script type="text/javascript">var FCT_SYSPATH = "/system/"</script>
+        <script language=javascript src="/system/fct.js"></script>
+        
+        <title>Custom Report Generate</title>
+        <meta content="False" name="vs_snapToGrid">
+        <meta content="Microsoft Visual Studio .NET 7.1" name="GENERATOR">
+        <meta content="Visual Basic .NET 7.1" name="CODE_LANGUAGE">
+        <meta content="JavaScript" name="vs_defaultClientScript">
+        <meta content="http://schemas.microsoft.com/intellisense/ie5" name="vs_targetSchema">
+<script language="JavaScript" type="text/javascript">
+
+attachEventHandler(window, "onload", function () {
+    //opening view report file
+    //scenario when - output type - EXCEL and SkipMergeByKeyColumn = True
+    if ($('.report_output_file').length > 0) { window.open($('.report_output_file').attr('href'), "_self"); }
+
+    DisableCheckboxesForScreen(true);
+
+    //Hiding Preview related checkbox
+    $("#EnvOptionsDiv1_WebEnvironmentDiv_IsPreviewed_CheckBox").hide();
+    $("#EnvOptionsDiv1_WebEnvironmentDiv_IsFilterChanged_CheckBox").hide();
+    $("#EnvOptionsDiv1_WebEnvironmentDiv_IsAlwaysPreview_CheckBox").hide();
+
+});
+
+function DrillDown(ss) {
+    newWindow = window.open(ss, 'aa', 'toolbar=no,resizable=yes,location=no,scrollbars=yes,height= 850,width=' + screen.width + ',alwaysraised=yes,left=0,top=0');
+}
+
+function AttachEmailDrillDown(ss) {
+    newWindow = window.open(ss, 'bb', 'toolbar=no,resizable=yes,location=no,scrollbars=yes,height=500,width=1200,alwaysraised=yes,left=0,top=0');
+}
+
+function Clear() {
+    for (var f = 0; f < document.forms[0].elements.length; f++) {
+        if (document.forms[0].elements[f].type == "text") {
+            if (document.forms[0].elements[f].name.indexOf('EnvOptionsDiv1:WebEnvironmentDiv:YSRReportLookup:LookupCode') == -1) {
+                document.forms[0].elements[f].value = ''
+            }
+        }
+        if (document.forms[0].elements[f].type == "select-one") {
+            for (var il = 0; il < document.forms[0].elements[f].length; il++) {
+                if (document.forms[0].elements[f].options[il].value == '') {
+                    document.forms[0].elements[f].value = ''; break;
+                }
+            }
+        }
+        if (document.forms[0].elements[f].type == "select-multiple") {
+            for (var il = 0; il < document.forms[0].elements[f].length; il++) {
+                document.forms[0].elements[f].options[il].selected = false;
+            }
+        }
+    }
+    SetFilterChangedFlag();
+    ExpandDiv("EnvOptionsDiv1:ReportFilterDiv", "CustomCorrespGenerate");
+    $("#EnvOptionsDiv1_DivReport1").empty();
+    return true;
+}
+
+function EnableAttachReport() {
+
+    if (document.all("EnvOptionsDiv1_WebEnvironmentDiv_IsAttach_CheckBox").checked == false) {
+        if (document.all("EnvOptionsDiv1_WebEnvironmentDiv_txtEmailRoleFlag_TextBox").value == "True" && document.all("EnvOptionsDiv1_WebEnvironmentDiv_txtMergedFileEmailID_TextBox").value == "") {
+            document.all("EnvOptionsDiv1_WebEnvironmentDiv_IsAttach_CheckBox").checked = true;
+        }
+    }
+
+    return true;
+}
+
+function DisableEmailByMerge() {
+
+    if (document.all("EnvOptionsDiv1_WebEnvironmentDiv_IsAttach_CheckBox").checked == false && document.all("EnvOptionsDiv1_WebEnvironmentDiv_IsMergedReport_CheckBox").checked == false) {
+        document.all("EnvOptionsDiv1_WebEnvironmentDiv_IsEmail_CheckBox").checked = false;
+    }
+    return true;
+}
+
+function DisableEmailByAttach() {
+    AttachReport_ShowOnPortal(false);
+    if (document.all("EnvOptionsDiv1_WebEnvironmentDiv_IsAttach_CheckBox").checked == false && document.all("EnvOptionsDiv1_WebEnvironmentDiv_txtMergedFileEmailID_TextBox").value == "") {
+        document.all("EnvOptionsDiv1_WebEnvironmentDiv_IsEmail_CheckBox").checked = false;
+    }
+    return true;
+}
+
+function AttachReport_ShowOnPortal(isShowOnProtalClicked) {
+    if (document.all("EnvOptionsDiv1_WebEnvironmentDiv_IsShowOnPortal_CheckBox")) {
+        if (isShowOnProtalClicked) {
+            if (document.all("EnvOptionsDiv1_WebEnvironmentDiv_IsShowOnPortal_CheckBox").checked == true) {
+                document.all("EnvOptionsDiv1_WebEnvironmentDiv_IsAttach_CheckBox").checked = true;
+            }
+        } else {
+            if (document.all("EnvOptionsDiv1_WebEnvironmentDiv_IsAttach_DisabledBox")) {
+                if (!document.all("EnvOptionsDiv1_WebEnvironmentDiv_IsAttach_DisabledBox").checked == true) {
+                    document.all("EnvOptionsDiv1_WebEnvironmentDiv_IsShowOnPortal_CheckBox").checked = false;
+                    document.all("EnvOptionsDiv1_WebEnvironmentDiv_IsShowOnPortal_CheckBox").disabled = true;
+                }
+            } else {
+                if (!document.all("EnvOptionsDiv1_WebEnvironmentDiv_IsAttach_CheckBox").checked == true) {
+                    document.all("EnvOptionsDiv1_WebEnvironmentDiv_IsShowOnPortal_CheckBox").checked = false;
+                }
+                document.all("EnvOptionsDiv1_WebEnvironmentDiv_IsShowOnPortal_CheckBox").disabled = false;
+            }
+        }
+    }
+
+}
+
+function DisableCheckboxesForScreen(IsPageLoad) {
+    if (!IsPageLoad) {
+        SetFilterChangedFlag();
+    }
+
+    //TR # 499466 - Defect # 108324 - Script Error issue
+    var ss = '';
+    if (Form1.EnvOptionsDiv1_WebEnvironmentDiv_YsiOutpuType_DropDownList)
+        ss = new String(Form1.EnvOptionsDiv1_WebEnvironmentDiv_YsiOutpuType_DropDownList.value)
+
+    if (ss == "Send PDF" || ss == "Send Excel" || ss == "Send Word") {
+        if (document.all("EnvOptionsDiv1_WebEnvironmentDiv_txtEmailAddress_TextBox"))
+            document.all("EnvOptionsDiv1_WebEnvironmentDiv_txtEmailAddress_TextBox").style.visibility = "visible";
+
+        if (document.all("EnvOptionsDiv1_WebEnvironmentDiv_lblEmailAddress_Label"))
+            document.all("EnvOptionsDiv1_WebEnvironmentDiv_lblEmailAddress_Label").style.visibility = "visible";
+
+        if (document.all("EnvOptionsDiv1_WebEnvironmentDiv_IsMergedReport_CheckBox")) {
+            document.all("EnvOptionsDiv1_WebEnvironmentDiv_IsMergedReport_CheckBox").checked = true;
+            document.all("EnvOptionsDiv1_WebEnvironmentDiv_IsMergedReport_CheckBox").disabled = true;
+        }
+    }
+    else {
+        if (document.all("EnvOptionsDiv1_WebEnvironmentDiv_txtEmailAddress_TextBox"))
+            document.all("EnvOptionsDiv1_WebEnvironmentDiv_txtEmailAddress_TextBox").style.visibility = "hidden";
+
+        if (document.all("EnvOptionsDiv1_WebEnvironmentDiv_lblEmailAddress_Label"))
+            document.all("EnvOptionsDiv1_WebEnvironmentDiv_lblEmailAddress_Label").style.visibility = "hidden";
+
+        if (document.all("EnvOptionsDiv1_WebEnvironmentDiv_IsMergedReport_CheckBox"))
+            document.all("EnvOptionsDiv1_WebEnvironmentDiv_IsMergedReport_CheckBox").disabled = false;
+    }
+
+    //Enable/Disable Preview button
+    if (ss == "Send PDF" || ss == "Send Excel" || ss == "Send Word" || ss == "Screen") {
+        //disabling Preview button as it is not supported for above output types
+        if (document.all("EnvOptionsDiv1_WebEnvironmentDiv_btnPreview_Button"))
+            document.all("EnvOptionsDiv1_WebEnvironmentDiv_btnPreview_Button").disabled = true;
+
+        //Enabling Generate button as Preview is not supported for above output types
+        if (document.all("EnvOptionsDiv1_WebEnvironmentDiv_btnSubmit_Button"))
+            document.all("EnvOptionsDiv1_WebEnvironmentDiv_btnSubmit_Button").disabled = false;
+    }
+    else {
+        if ((document.all("EnvOptionsDiv1_WebEnvironmentDiv_IsAttach_CheckBox") && document.all("EnvOptionsDiv1_WebEnvironmentDiv_IsAttach_CheckBox").checked)
+            || $('#EnvOptionsDiv1_WebEnvironmentDiv_IsAttach_DisabledBox').length != 1
+            || (document.all("EnvOptionsDiv1_WebEnvironmentDiv_IsEmail_CheckBox") && document.all("EnvOptionsDiv1_WebEnvironmentDiv_IsEmail_CheckBox").checked)
+            || $('#EnvOptionsDiv1_WebEnvironmentDiv_IsEmail_DisabledBox').length != 1)
+
+            if (document.all("EnvOptionsDiv1_WebEnvironmentDiv_IsAlwaysPreview_CheckBox")
+                && document.all("EnvOptionsDiv1_WebEnvironmentDiv_IsAlwaysPreview_CheckBox").checked)
+                if (document.all("EnvOptionsDiv1_WebEnvironmentDiv_btnPreview_Button"))
+                    document.all("EnvOptionsDiv1_WebEnvironmentDiv_btnPreview_Button").disabled = false;
+
+        if (document.all("EnvOptionsDiv1_WebEnvironmentDiv_IsAlwaysPreview_CheckBox")
+            && document.all("EnvOptionsDiv1_WebEnvironmentDiv_IsAlwaysPreview_CheckBox").checked
+            && !document.getElementById("EnvOptionsDiv1_WebEnvironmentDiv_IsPreviewed_CheckBox").checked) {
+            //Disabling Generate Button as it requires preview
+            if (document.all("EnvOptionsDiv1_WebEnvironmentDiv_btnSubmit_Button"))
+                document.all("EnvOptionsDiv1_WebEnvironmentDiv_btnSubmit_Button").disabled = true;
+        }
+        else
+            //Enabling Generate Button if Already Previewed or Preview is not forced                    
+            if (document.all("EnvOptionsDiv1_WebEnvironmentDiv_btnSubmit_Button"))
+                document.all("EnvOptionsDiv1_WebEnvironmentDiv_btnSubmit_Button").disabled = false;
+    }
+
+    if (ss == "Screen") {
+        if (document.all("EnvOptionsDiv1_WebEnvironmentDiv_IsEmail_CheckBox"))
+            document.all("EnvOptionsDiv1_WebEnvironmentDiv_IsEmail_CheckBox").checked = false;
+
+        if (document.all("EnvOptionsDiv1_WebEnvironmentDiv_IsAttach_CheckBox"))
+            document.all("EnvOptionsDiv1_WebEnvironmentDiv_IsAttach_CheckBox").checked = false;
+
+        if (document.all("EnvOptionsDiv1_WebEnvironmentDiv_IsMergedReport_CheckBox"))
+            document.all("EnvOptionsDiv1_WebEnvironmentDiv_IsMergedReport_CheckBox").checked = false;
+
+        if (document.all("EnvOptionsDiv1_WebEnvironmentDiv_IsShowOnPortal_CheckBox"))
+            document.all("EnvOptionsDiv1_WebEnvironmentDiv_IsShowOnPortal_CheckBox").checked = false;
+
+        return true;
+    }
+
+}
+
+function ShowYSRReportMonitor() {
+    var ss = "../pages/CustomCorrespReportMonitor.aspx?bMonitor=1";
+
+    //var ss = "../pages/SysConductorReportMonitor.aspx?bMonitor=0";
+    var myMonitorWindow = window.open(ss, null, 'height=600,width=1100,scrollbars=no,resizable=no,left=10,top=10,toolbar=yes,menubar=no');
+
+}
+
+/* Over-riding function to show progressbar once we click on generate button */
+function ProgressbarShow(myBarId) {
+    var timerElement = document.getElementById("progressbarTimerId");
+    if (timerElement == null) {
+        timerElement = document.createElement("input");
+        timerElement.type = "hidden";
+        timerElement.id = "progressbarTimerId";
+        timerElement.value = 0;
+        document.body.appendChild(timerElement);
+    }
+
+    if (timerElement == null || timerElement.value != 0) { /* There's already a progress bar about to show. just exit */return; }
+
+    /* Set the progressbar to show after 1 second */
+    timerElement.value = setTimeout("ProgressbarShowDiv()", 1000);
+}
+
+function SetFilterChangedFlag() {
+    if (document.all("EnvOptionsDiv1_WebEnvironmentDiv_btnPreview_Button")
+        && document.all("EnvOptionsDiv1_WebEnvironmentDiv_btnPreview_Button").disabled == false
+        && document.getElementById("EnvOptionsDiv1_WebEnvironmentDiv_IsPreviewed_CheckBox")
+        && document.getElementById("EnvOptionsDiv1_WebEnvironmentDiv_IsPreviewed_CheckBox").checked) {
+        if (document.getElementById("EnvOptionsDiv1_WebEnvironmentDiv_IsFilterChanged_CheckBox"))
+            document.getElementById("EnvOptionsDiv1_WebEnvironmentDiv_IsFilterChanged_CheckBox").checked = true;
+    }
+}
+
+</script>
+<style type="text/css">
+#Form1 {
+    width: 1378px;
+}
+
+input.switch:empty {
+    margin-left: -999px;
+}
+
+.alignRight {
+    float: right;
+}
+
+input.switch:empty ~ label {
+    position: relative;
+    float: left;
+    line-height: 1.6em;
+    text-indent: 4em;
+    margin: 0.2em 0;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+    input.switch:empty ~ label:before,
+    input.switch:empty ~ label:after {
+        position: absolute;
+        display: block;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        content: ' ';
+        width: 3.6em;
+        background-color: #c33;
+        border-radius: 0.3em;
+        box-shadow: inset 0 0.2em 0 rgba(0,0,0,0.3);
+        -webkit-transition: all 100ms ease-in;
+        transition: all 100ms ease-in;
+    }
+
+    input.switch:empty ~ label:after {
+        width: 1.4em;
+        top: 0.1em;
+        bottom: 0.1em;
+        margin-left: 0.1em;
+        background-color: #fff;
+        border-radius: 0.15em;
+        box-shadow: inset 0 -0.2em 0 rgba(0,0,0,0.2);
+    }
+
+input.switch:checked ~ label:before {
+    background-color: #393;
+}
+
+input.switch:checked ~ label:after {
+    margin-left: 2.1em;
+}
+
+.verticalLine {
+    border-right: thin solid #BDBDBD;
+}
+
+.reportFilterDiv {
+    z-index: 120;
+}
+
+.fadeIn{        
+    animation: fadein 1s;
+    -moz-animation: fadein 1s; /* Firefox */
+    -webkit-animation: fadein 1s; /* Safari and Chrome */
+    -o-animation: fadein 1s; /* Opera */
+}
+
+@keyframes fadein {
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
+}
+@-moz-keyframes fadein { /* Firefox */
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
+}
+@-webkit-keyframes fadein { /* Safari and Chrome */
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
+}
+@-o-keyframes fadein { /* Opera */
+    from {
+        opacity:0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+</style>
+</HEAD>
+<body id="Body1" class="body" style="OVERFLOW: auto" leftmargin="0" topmargin="0" ms_positioning="GridLayout" onBeforeUnload="" onLoad="SetInitialFocus(document.getElementById('EnvOptionsDiv1_WebEnvironmentDiv_YSRReportLookup_LookupCode'));AutoSizeWindow();nameWindow('LMH GPR Journal Entry');">
+<form method="post" action="./CustomCorrespGenerateNew.aspx?1=1&amp;ReportCode=LMHGPRJE" id="Form1">
+ 
+
+
+<div class="Tab">
+<table class="TitleBar" cellspacing="0" cellpadding="0" style="width:100%;border-collapse:collapse;">
+<tr>
+    <td class="TitleBar" NOWRAP="true"><span style="height:20px;">LMH GPR Journal Entry</span></td>
+</tr>
+</table>
+</div>
+
+
+<div id="YSRDiv" class="fadeIn" style="Z-INDEX: 103; LEFT: 13px; VISIBILITY: visible; WIDTH: 100%; POSITION: absolute; TOP: 30px; HEIGHT: 100%" ms_positioning="GridLayout">
+
+    <input name="GoToRow:TextBox" type="text" id="GoToRow_TextBox" tabindex="999" class="Inp" isChanged="false" mandatory="false" onChange="gotChange2(this);" style="width:0px;LEFT:766px;TOP:127px;POSITION:absolute;" />
+
+    <script>jQuery(function() {jQuery('#EnvOptionsDiv1_expanderContent').find('*').attr('visibility', 'visible');jQuery('#EnvOptionsDiv1_expanderContent').css('visibility', 'visible');});</script><div id="EnvOptionsDiv1_expanderContent" DefaultCollapsed="true" style="width:;height:;border:0px Solid #000000;position:relative;top:1px;left:;overflow:;"ParentDiv="True"><span id="EnvOptionsDiv1_expanderHead" style="cursor:pointer;position:relative;top:0px;left:0px;width:;height:15px;margin:0;"><span style="z-index:99999;float:left;left:0px;border-right:1px solid #000000;border-bottom:1px solid #000000;border-top:1px solid #000000;border-left:1px solid #000000;width:14px;height:15px;text-align:center;" id="EnvOptionsDiv1_expanderSign">-</span></span><span>
+            <script>jQuery(function() {jQuery('#EnvOptionsDiv1:WebEnvironmentDiv_expanderContent').find('*').attr('visibility', 'visible');jQuery('#EnvOptionsDiv1:WebEnvironmentDiv_expanderContent').css('visibility', 'visible');jQuery('#EnvOptionsDiv1:WebEnvironmentDiv_headerText').css('visibility', 'visible');});</script><span id="EnvOptionsDiv1:WebEnvironmentDiv_headerText" style="left: 40; top: 5; position: relative; background-color: rgb(255, 255, 255); height: 12px; z-index: 99999; text-align: center; font-weight: bold;"> Report Options </span><div id="EnvOptionsDiv1:WebEnvironmentDiv" style="width:1000px;height:80px;border:1px Solid #000000;position:relative;top:0px;left:10px;overflow:hidden;"ParentDiv="False"><span>
+                <div id="EnvOptionsDiv1_WebEnvironmentDiv_Panel3" style="Z-INDEX: 108; POSITION: absolute; TOP: 0px; height: 100px; width: inherit; bottom: 566px;">
+
+                    <content>
+                    <div id="EnvOptionsDiv1_WebEnvironmentDiv_Screenpanel3" ms_positioning="GridLayout" style="border-width:1px;border-style:None;POSITION: relative; top: 20px; left: 1px; height: 119px; width: inherit;">
+
+                       
+                    <table id="EnvOptionsDiv1_WebEnvironmentDiv_Table2" style="padding-left:10px;">
+    <tr>
+        <td>
+                                <table cellspacing="1">                                                    
+                                            <tr style="padding-bottom:10px;">
+                                               <td colspan="2">
+                                                    <a id="EnvOptionsDiv1_WebEnvironmentDiv_YSRReportLookup_LookupLink" tabindex="-1" class="aspNetDisabled Def" style="font-family:Verdana;font-size:8pt;width:100px;POSITION:relative;">Report</a><input isAutoComplete="false" lookupClass="YSI.Utils.CustomCorrespondence#YSI.Utils.CustomCorrespondence.Lookups.ysiYSRReportLookup" name="EnvOptionsDiv1:WebEnvironmentDiv:YSRReportLookup:LookupCode_Disabled" myParents="YSRQuerystringCodes:TextBox^" myParentTypes="YSI.Controls.ysiTextBox^" id="EnvOptionsDiv1_WebEnvironmentDiv_YSRReportLookup_LookupCode" disabled="disabled" tabindex="1" class="aspNetDisabled Inp" isChanged="false" mandatory="false" multiselect="false" spellcheck="false" value="LMHGPRJE" type="text" class="INP" isLookup="True" onBlur=" " onChange="__doPostBack('EnvOptionsDiv1$WebEnvironmentDiv$YSRReportLookup$LookupCode','YSI.Utils.CustomCorrespondence^YSI.Utils.CustomCorrespondence.Lookups.ysiYSRReportLookup')" style="display:inline-block;font-family:Verdana;font-size:8pt;WIDTH:110px;POSITION:relative;" /><input name="EnvOptionsDiv1:WebEnvironmentDiv:YSRReportLookup:LookupCode" value="LMHGPRJE" type="hidden" isLookup="True" />
+                                               </td>
+                                                <td>
+                                                    <span id="EnvOptionsDiv1_WebEnvironmentDiv_YsiLabel7_Label" style="height:18px;width:60px;text-align:Right;POSITION:relative;">Merge</span>
+                                                </td>
+                                                <td>
+                                                    <div id="IsMergedReport_Container" style="LEFT:;TOP:;POSITION:relative;">
+            <span tabindex="1" style="FONT:Verdana 8pt;"><input id="EnvOptionsDiv1_WebEnvironmentDiv_IsMergedReport_CheckBox" type="checkbox" name="EnvOptionsDiv1:WebEnvironmentDiv:IsMergedReport:CheckBox" onClick="gotChange2(this);DisableEmailByMerge();" /></span>
+        </div>
+                                                </td>        
+                                                <td>
+                                                    <span id="EnvOptionsDiv1_WebEnvironmentDiv_YsiLabel4_Label" style="height:18px;width:60px;text-align:Right;POSITION:relative;">Attach</span>
+                                                </td>
+                                                <td>
+                                                    <div id="IsAttach_Container" style="LEFT:;TOP:;POSITION:relative;">
+            <span disabled="disabled" tabindex="1" style="FONT:Verdana 8pt;"><input id="EnvOptionsDiv1_WebEnvironmentDiv_IsAttach_DisabledBox" type="checkbox" name="EnvOptionsDiv1:WebEnvironmentDiv:IsAttach:DisabledBox" disabled="disabled" onClick="gotChange2(this);DisableEmailByAttach();" /></span><span style="visibility:hidden;TOP:0px;LEFT:0px;POSITION:absolute;"><input id="EnvOptionsDiv1_WebEnvironmentDiv_IsAttach_CheckBox" name="EnvOptionsDiv1:WebEnvironmentDiv:IsAttach:CheckBox" type="checkbox" /></span>
+        </div>
+                                                </td>      
+                                                <td>
+                                                    
+                                                </td>
+                                                <td>
+                                                    
+                                                </td>                                                    
+                                                <td style="padding-left: 15px;" colspan="2">
+                                                    <span id="EnvOptionsDiv1_WebEnvironmentDiv_lblEmailAddress_Label" title="Email Address" style="height:18px;width:83px;text-align:Left;POSITION:relative;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;">Email Address</span>
+                                                </td>
+                                                <td>
+                                                 <input name="EnvOptionsDiv1:WebEnvironmentDiv:txtEmailAddress:TextBox" type="text" value="jshakely@lpsi.com" id="EnvOptionsDiv1_WebEnvironmentDiv_txtEmailAddress_TextBox" tabindex="1" class="Inp" isChanged="false" mandatory="false" onBlur="if (!ValidateEmail(this)) {return};" onMouseOver="JavaScript:if(this.value != &quot;&quot;){Hand(this)}" ondblclick="JavaScript:if(this.value != &quot;&quot;){MailTo(this)}" onChange="gotChange2(this);" style="width:233px;POSITION:relative;color:blue;text-decoration:underline;" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>                                                            
+                                                    <span id="EnvOptionsDiv1_WebEnvironmentDiv_YsiLabel3_Label" style="height:18px;width:93px;text-align:Left;POSITION:relative;">Output</span>
+                                                </td>
+                                                <td>
+                                                       <select name="EnvOptionsDiv1:WebEnvironmentDiv:YsiOutpuType:DropDownList" id="EnvOptionsDiv1_WebEnvironmentDiv_YsiOutpuType_DropDownList" tabindex="1" mandatory="false" onChange="gotChange2(this);DisableCheckboxesForScreen(false);" style="font-family:Verdana;font-size:8pt;height:19px;width:109px;POSITION:relative;TOP:1px;">
+            <option value="PDF">PDF</option>
+            <option value="Excel">Excel</option>
+            <option selected="selected" value="Screen">Screen</option>
+            <option value="Send PDF">Send PDF</option>
+            <option value="Send Excel">Send Excel</option>
+
+        </select>                                                            
+                                                </td>
+                                                <td>
+                                                    <span id="EnvOptionsDiv1_WebEnvironmentDiv_YsiLabel5_Label" style="height:18px;width:60px;text-align:Right;POSITION:relative;">Grid</span>
+                                                </td>
+                                                <td>
+                                                    <div id="IsShowGrid_Container" style="LEFT:;TOP:;POSITION:relative;">
+            <span tabindex="1" style="FONT:Verdana 8pt;"><input id="EnvOptionsDiv1_WebEnvironmentDiv_IsShowGrid_CheckBox" type="checkbox" name="EnvOptionsDiv1:WebEnvironmentDiv:IsShowGrid:CheckBox" onClick="gotChange2(this);SetFilterChangedFlag();" /></span>
+        </div>
+                                                </td>
+                                                <td>
+                                                    <span id="EnvOptionsDiv1_WebEnvironmentDiv_YsiLabel6_Label" style="height:18px;width:60px;text-align:Right;POSITION:relative;">Email</span>
+                                                </td>
+                                                <td>
+                                                    <div id="IsEmail_Container" style="LEFT:;TOP:;POSITION:relative;">
+            <span disabled="disabled" tabindex="1" style="FONT:Verdana 8pt;"><input id="EnvOptionsDiv1_WebEnvironmentDiv_IsEmail_DisabledBox" type="checkbox" name="EnvOptionsDiv1:WebEnvironmentDiv:IsEmail:DisabledBox" disabled="disabled" onClick="gotChange2(this);EnableAttachReport();" /></span><span style="visibility:hidden;TOP:0px;LEFT:0px;POSITION:absolute;"><input id="EnvOptionsDiv1_WebEnvironmentDiv_IsEmail_CheckBox" name="EnvOptionsDiv1:WebEnvironmentDiv:IsEmail:CheckBox" type="checkbox" /></span>
+        </div>
+                                                </td>                                                        
+                                                <td>
+                                                    <span id="EnvOptionsDiv1_WebEnvironmentDiv_YsiLabel9_Label" style="height:18px;width:131px;text-align:Right;POSITION:relative;">Show on Portal</span>
+                                                </td>
+                                                <td>
+                                                    
+                                                </td>
+                                                <td>
+                                                    <span id="EnvOptionsDiv1_WebEnvironmentDiv_YsiLabel10_Label" style="height:18px;width:80px;text-align:Right;POSITION:relative;">Hold Emails</span>
+                                               </td>
+                                                <td>
+                                                    <div id="IsHoldEmails_Container" style="LEFT:;TOP:;POSITION:relative;">
+            <span tabindex="1" style="FONT:Verdana 8pt;"><input id="EnvOptionsDiv1_WebEnvironmentDiv_IsHoldEmails_CheckBox" type="checkbox" name="EnvOptionsDiv1:WebEnvironmentDiv:IsHoldEmails:CheckBox" onClick="gotChange2(this);;" /></span>
+        </div>
+                                                </td>                                                       
+                                                <td>
+                                                    <button id="EnvOptionsDiv1_WebEnvironmentDiv_btnSubmit_Button" language="javascript" onmouseup="className='Highlight';" onmouseleave="className='';" onMouseOver="Hand(this)" onClick="if (FT_FinalTest()) { this.disabled = true;__doPostBack('EnvOptionsDiv1$WebEnvironmentDiv$btnSubmit','') }" class="" style="height:22px;width:75px;z-index:1000;POSITION:relative;" tabindex="7" accesskey="g" onmouseenter="className='Highlight';Hand(this)" onmousedown="className='Clicked';"><u>G</u>enerate</button>
+                                                    <button id="EnvOptionsDiv1_WebEnvironmentDiv_btnClear_Button" language="javascript" onmouseup="className='Highlight';" onmouseleave="className='';" onMouseOver="Hand(this)" onClick="if (Clear()) { __doPostBack('EnvOptionsDiv1$WebEnvironmentDiv$btnClear','') }" class="" style="height:22px;width:75px;z-index:1000;POSITION:relative;" tabindex="8" accesskey="l" onmouseenter="className='Highlight';Hand(this)" onmousedown="className='Clicked';">C<u>l</u>ear</button>
+                                                    <button id="EnvOptionsDiv1_WebEnvironmentDiv_btnHelp_Button" language="javascript" onmouseup="className='Highlight';" onmouseleave="className='';" onMouseOver="Hand(this)" onclick="JavaScript:FilterHelp4Aspx('YSRReportGenerate')" class="" style="height:22px;width:75px;z-index:1000;POSITION:relative;" tabindex="4" accesskey="h" onmouseenter="className='Highlight';Hand(this)" onmousedown="className='Clicked';"><u>H</u>elp</button>
+                                                    <button id="EnvOptionsDiv1_WebEnvironmentDiv_btnPreview_Button" onMouseOver="Hand(this)" style="height:22px;width:75px;z-index:1000;POSITION:relative;" disabled="disabled" onClick="if (FT_FinalTest()) { __doPostBack('EnvOptionsDiv1$WebEnvironmentDiv$btnPreview','') }" language="javascript" accesskey="s" class="disabled-on-render ">Preview</button>
+
+                                                </td>
+                                                                                                                                                                                                                                                     
+                                            </tr>    
+                                    <tr>
+                                        <td>
+                                            
+                                        </td>
+                                        <td>
+                                            <div id="IsPreviewed_Container" style="LEFT:;TOP:;POSITION:relative;">
+            <span tabindex="1000" style="FONT:Verdana 8pt;"><input id="EnvOptionsDiv1_WebEnvironmentDiv_IsPreviewed_CheckBox" type="checkbox" name="EnvOptionsDiv1:WebEnvironmentDiv:IsPreviewed:CheckBox" onClick="gotChange2(this);" /></span>
+        </div>
+                                        </td>
+                                         <td>
+                                            
+                                        </td>
+                                        <td>
+                                            <div id="IsFilterChanged_Container" style="LEFT:;TOP:;POSITION:relative;">
+            <span tabindex="1000" style="FONT:Verdana 8pt;"><input id="EnvOptionsDiv1_WebEnvironmentDiv_IsFilterChanged_CheckBox" type="checkbox" name="EnvOptionsDiv1:WebEnvironmentDiv:IsFilterChanged:CheckBox" onClick="gotChange2(this);" /></span>
+        </div>
+                                        </td>
+                                         <td>
+                                            <div id="IsAlwaysPreview_Container" style="LEFT:;TOP:;POSITION:relative;">
+            <span tabindex="1000" style="FONT:Verdana 8pt;"><input id="EnvOptionsDiv1_WebEnvironmentDiv_IsAlwaysPreview_CheckBox" type="checkbox" name="EnvOptionsDiv1:WebEnvironmentDiv:IsAlwaysPreview:CheckBox" onClick="gotChange2(this);" /></span>
+        </div>
+                                        </td>
+                                    </tr>                                                                                                                                          
+                                        </table>                                                                                       
+
+                                        <input name="EnvOptionsDiv1:WebEnvironmentDiv:txtMergedFileEmailID:TextBox" type="text" id="EnvOptionsDiv1_WebEnvironmentDiv_txtMergedFileEmailID_TextBox" tabindex="1" class="Inp" isChanged="false" mandatory="false" onChange="gotChange2(this);" style="width:0px;POSITION:relative;" />
+                                        <input name="EnvOptionsDiv1:WebEnvironmentDiv:txtEmailRoleFlag:TextBox" type="text" value="False" id="EnvOptionsDiv1_WebEnvironmentDiv_txtEmailRoleFlag_TextBox" tabindex="1" class="Inp" isChanged="false" mandatory="false" onChange="gotChange2(this);" style="width:0px;POSITION:relative;" />
+                                                                       
+                            </td>
+        <td style="padding-top: 5px"></td>
+    </tr>
+</table>
+
+                
+                    
+</div>
+                         </content>
+                
+</div>
+            </span></div>
+           
+            <!--General -->
+            <script>jQuery(function() {jQuery('#EnvOptionsDiv1:ReportFilterDiv_expanderContent').find('*').attr('visibility', 'visible');jQuery('#EnvOptionsDiv1:ReportFilterDiv_expanderContent').css('visibility', 'visible');jQuery('#EnvOptionsDiv1:ReportFilterDiv_headerText').css('visibility', 'visible');});</script><span id="EnvOptionsDiv1:ReportFilterDiv_headerText" style="left: 40; top: 15; position: relative; background-color: rgb(255, 255, 255); height: 12px; z-index: 99999; text-align: center; font-weight: bold;"> Report Filters </span><div id="EnvOptionsDiv1:ReportFilterDiv_expanderContent" DefaultCollapsed="false" style="width:1000px;height:100px;border:1px Solid #000000;position:relative;top:11px;left:10px;overflow:hidden;"ParentDiv="False"><span id="EnvOptionsDiv1:ReportFilterDiv_expanderHead" style="cursor:pointer;position:relative;top:0px;left:0px;width:1000px;height:15px;margin:0;"><span style="z-index:99999;float:left;left:0px;border-right:1px solid #000000;border-bottom:1px solid #000000;width:14px;height:15px;text-align:center;" id="EnvOptionsDiv1:ReportFilterDiv_expanderSign">+</span></span><span>
+                <div id="EnvOptionsDiv1_ReportFilterDiv_ReportFilterPanel" style="width: 1025px;">
+
+                    <content>
+                    <table id="EnvOptionsDiv1_ReportFilterDiv_TableDataEntry" style="padding-left: 10px;">
+<tr>
+    <td colspan="4" style="height: 10px">
+                            </td>
+</tr>
+<tr>
+    <td>
+                                
+                                <div id="EnvOptionsDiv1_ReportFilterDiv_Panel1" style="width:100%;Z-INDEX: 108; LEFT: 0px; POSITION: relative; TOP: 0px; height: 100%;">
+        
+                                    <div id="EnvOptionsDiv1_ReportFilterDiv_ScreenPanel" ms_positioning="GridLayout" style="border-width:1px;border-style:None;width:490px;POSITION: absolute; top: 0px; left: 0px; height: 100%;">
+            <table>
+                <tr>
+                    <td width="80px" colspan="4"><a id="EnvOptionsDiv1_ReportFilterDiv_Ysi3373_LookupLink" tabindex="-1" class="Def" href="JAVASCRIPT:Lookup2('YSI.Common',%20'YSI.Common.Lookups.ysiPropertyOrListLookup',%20'EnvOptionsDiv1_ReportFilterDiv_Ysi3373_LookupCode',%20'EnvOptionsDiv1_ReportFilterDiv_Ysi3373_Description',%20'True')" style="font-family:Verdana;font-size:8pt;width:158px;POSITION:relative;">Property</a><input isAutoComplete="false" lookupClass="YSI.Common#YSI.Common.Lookups.ysiPropertyOrListLookup" name="EnvOptionsDiv1:ReportFilterDiv:Ysi3373:LookupCode" id="EnvOptionsDiv1_ReportFilterDiv_Ysi3373_LookupCode" tabindex="2" class="Req" isChanged="false" mandatory="true" multiselect="true" spellcheck="false" value="64044" type="text" class="INP" isLookup="True" onBlur=" " onChange="gotChange2(this); SetFilterChangedFlag();" style="display:inline-block;font-family:Verdana;font-size:8pt;WIDTH:135px;POSITION:relative;" /></td>
+                </tr>
+                <tr>
+                    <td width="125px"><span id="EnvOptionsDiv1_ReportFilterDiv__ctl35_Label" style="height:18px;width:150px;text-align:Left;POSITION:relative;">Post Month</span></td>
+                    <td align="left"><input name="EnvOptionsDiv1:ReportFilterDiv:Ysi3374:TextBox" type="text" value="10/2021" id="EnvOptionsDiv1_ReportFilterDiv_Ysi3374_TextBox" tabindex="3" class="Req" isChanged="false" mandatory="true" onChange="SetFilterChangedFlag();gotChange2(this);" onBlur="if (!ValidateMonthYear2(this)) {return};" isDay="false" style="width:135px;POSITION:relative;" /></td>
+                    <td width="30px"> </td>
+                    <td align="left"> </td>
+                </tr>
+                <tr>
+                    <td width="125px"><span id="EnvOptionsDiv1_ReportFilterDiv__ctl41_Label" style="height:18px;width:150px;text-align:Left;POSITION:relative;">Book</span></td>
+                    <td align="left"><select name="EnvOptionsDiv1:ReportFilterDiv:Ysi3375:DropDownList" id="EnvOptionsDiv1_ReportFilterDiv_Ysi3375_DropDownList" tabindex="4" class="Req" mandatory="true" onChange="gotChange2(this);SetFilterChangedFlag();" style="font-family:Verdana;font-size:8pt;height:19px;width:135px;POSITION:relative;TOP:1px;">
+                        <option selected="selected" value="Both">Both</option>
+                        <option value="Accrual">Accrual</option>
+
+                    </select></td>
+                    <td width="30px"> </td>
+                    <td align="left"> </td>
+                </tr>
+                <tr>
+                    <td width="125px"><span id="EnvOptionsDiv1_ReportFilterDiv__ctl47_Label" style="height:18px;width:150px;text-align:Left;POSITION:relative;">Report Only?</span></td>
+                    <td align="left"><select name="EnvOptionsDiv1:ReportFilterDiv:Ysi3376:DropDownList" id="EnvOptionsDiv1_ReportFilterDiv_Ysi3376_DropDownList" tabindex="5" class="Req" mandatory="true" onChange="gotChange2(this);SetFilterChangedFlag();" style="font-family:Verdana;font-size:8pt;height:19px;width:135px;POSITION:relative;TOP:1px;">
+                        <option value="Yes">Yes</option>
+                        <option selected="selected" value="Create Unposted Batch">Create Unposted Batch</option>
+
+                    </select></td>
+                    <td width="30px"> </td>
+                    <td align="left"> </td>
+                </tr>
+            </table>
+
+        </div>
+                                
+    </div>
+                                
+                            </td>
+    <td>
+                                
+                                <div id="EnvOptionsDiv1_ReportFilterDiv_Panel2" style="height:100%;width:100%;border-left: thick solid #ff0000;Z-INDEX: 108; LEFT: 430px; POSITION: relative; TOP: 0px">
+        
+                                    <div id="EnvOptionsDiv1_ReportFilterDiv_ScreenPanel2" ms_positioning="GridLayout" style="border-width:1px;border-style:None;width:490px;POSITION: absolute; top: 0px; left: 0px; height: 100%;">
+            <table>
+            </table>
+
+        </div>
+
+                                
+    </div>
+                                
+                            </td>
+    <td>
+                                
+                                <div id="EnvOptionsDiv1_ReportFilterDiv_Panel4" style="height:100%;width:100%;border-left: thick solid #ff0000;Z-INDEX: 108; LEFT: 650px; POSITION: relative; TOP: 0px">
+        
+                                    <div id="EnvOptionsDiv1_ReportFilterDiv_ScreenPanel4" ms_positioning="GridLayout" style="border-width:1px;border-style:None;width:490px;POSITION: absolute; top: 0px; left: 0px; height: 100%;">
+            <table>
+            </table>
+
+        </div>
+
+                                
+    </div>
+                                
+                            </td>
+</tr>
+</table>
+
+                </content>
+                
+</div>
+            </span></div>
+            <!--General(End) -->                   
+             
+            <div id="EnvOptionsDiv1_DivReport1" class="fadeIn" style="resize: both; Z-INDEX: -1; LEFT: 5px; WIDTH: 100%; HEIGHT: 100%; padding-top: 35px;clear:both; padding-left: 10px;" ms_positioning="GridLayout">
+            </div>
+     
+       
+                  
+        </span></div>
+               
+     <div id="DivExportLink">
+         <div style="position:relative;width:100%;Z-INDEX: 117;top:20px;">
+             
+         </div>                   
+      </div>
+
+    <div id="DivReport" style="resize:both;LEFT:5px;padding-top:35px;WIDTH:100%;Position:Absolute;Z-INDEX:-1;HEIGHT:100%;clear:both;display:none;padding-left:20px;" ms_positioning="GridLayout">
+    <div id="myTab" class="Tab_Strip" tabIds="myScrPanel0^" maxTabsPerRow="6" style="position:absolute;top:0px;left:0px;width:100%;">
+<div class="TabStripRow" id="myTab_row_0">
+<span id="myTab_tab0" class="TabStripCell" onMouseOver="Hand(this);" onMouseEnter="if (className == 'tab_Inactive') {className='tab_Highlight'};" onMouseLeave="if (className == 'tab_Highlight') {className='tab_Inactive'};" tabWidth="-1" targetId="myScrPanel0" onClick="javascript: if (this.className == 'TabStripActiveCell') { return } TabClick4Aspx2(this, 'myScrPanel0');" onDblClick="javascript: (this, 'myScrPanel0')">Report</span></div>
+
+</div><input name="myTab:ActiveCell" type="hidden" id="myTab_ActiveCell" ActiveTabId="" /><span><script>
+function myTab_onload(e) { 
+TabClick4Aspx2(document.getElementById('myTab_tab0'), 'myScrPanel0');
+}
+function myTab_onresize(e) { 
+if (document.getElementById('myTab_ActiveCell').value == "" || document.getElementById('myTab_ActiveCell').value == null) {return;}           TabClick4Aspx2(document.getElementById(document.getElementById('myTab_ActiveCell').value), document.getElementById('myTab_ActiveCell').ActiveTabId);
+}
+attachEventHandler(window, "onload",myTab_onload, false);
+attachEventHandler(window, "onresize",myTab_onresize, false);
+attachEventHandler(window, "onload",AutoSizeWindow, false);
+</script>
+</span><div id="myScrPanel0" class="TabBody" style="top:340px;left:10px;display:none;">
+<span>
+<STYLE type="text/css">
+TD.BORDER {
+border-right: #cccccc 1px solid; 
+border-top: #cccccc 1px solid; 
+border-left: 0px solid; 
+border-bottom: 0px solid; 
+border-collapse: collapse; 
+border-style: solid; 
+border-color: #cccccc; 
+} 
+TD.BORDERLEFT {
+border-right: #cccccc 1px solid; 
+border-top: #cccccc 1px solid; 
+border-left: 1px solid; 
+border-bottom: 0px solid; 
+border-collapse: collapse; 
+border-style: solid; 
+border-color: #cccccc; 
+} 
+TD {
+font-family: Tahoma, Verdana;
+} 
+</STYLE>
+<div style="position:relative;width:100%;">
+<table id="TableWriter1" cellspacing="0" cellpadding="0" align="Left">
+    <tr id="TableWriter1_Row0" onclick="onClick=RowClick(this) ">
+        <td nowrap align="Left" colspan="13" style="color:#000000;font-weight:bold;">&nbsp;Property(s):&nbsp;64044</td>
+    </tr>
+    <tr id="TableWriter1_Row1" onclick="onClick=RowClick(this) ">
+        <td nowrap align="Left" colspan="13" style="color:#000000;font-weight:bold;">&nbsp;End&nbsp;Date:&nbsp;10/31/2021</td>
+    </tr>
+    <tr id="TableWriter1_Row2" onclick="onClick=RowClick(this) ">
+        <td nowrap align="Left" colspan="13" style="color:#000000;font-weight:bold;">&nbsp;Post&nbsp;Month:&nbsp;10/2021</td>
+    </tr>
+    <tr id="TableWriter1_Row3" onclick="onClick=RowClick(this) ">
+        <td nowrap align="Left" colspan="13" style="color:#000000;font-weight:bold;">&nbsp;Book:&nbsp;Both</td>
+    </tr>
+    <tr id="TableWriter1_Row4" onclick="onClick=RowClick(this) ">
+        <td nowrap align="Left" colspan="13" style="color:#000000;font-weight:bold;">&nbsp;Report&nbsp;Only?:&nbsp;Create&nbsp;Unposted&nbsp;Batch</td>
+    </tr>
+    <tr id="TableWriter1_Row5" onclick="onClick=RowClick(this) ">
+        <td nowrap align="Left" style="color:#FFFFFF;font-weight:bold;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;background-color:#000000;">&nbsp;Batch&nbsp;Id</td><td nowrap align="Left" style="color:#FFFFFF;font-weight:bold;background-color:#000000;">&nbsp;Ctrl&nbsp;#</td><td nowrap align="Left" style="color:#FFFFFF;font-weight:bold;background-color:#000000;">&nbsp;Date&nbsp;Created</td><td nowrap align="Left" style="color:#FFFFFF;font-weight:bold;background-color:#000000;">&nbsp;Post&nbsp;Month</td><td nowrap align="Left" style="color:#FFFFFF;font-weight:bold;background-color:#000000;">&nbsp;Property</td><td nowrap align="Left" style="color:#FFFFFF;font-weight:bold;background-color:#000000;">&nbsp;Book</td><td nowrap align="Left" style="color:#FFFFFF;font-weight:bold;background-color:#000000;">&nbsp;Status</td><td nowrap align="Left" style="width:93px;color:#FFFFFF;font-weight:bold;background-color:#000000;">&nbsp;Market 
+Rent</td><td nowrap align="Left" style="width:100px;color:#FFFFFF;font-weight:bold;background-color:#000000;">&nbsp;Loss to 
+Old Lease</td><td nowrap align="Left" style="width:102px;color:#FFFFFF;font-weight:bold;background-color:#000000;">&nbsp;Gain to 
+Old Lease</td><td nowrap align="Left" style="width:105px;color:#FFFFFF;font-weight:bold;background-color:#000000;">&nbsp;Vacancy
+Loss-Current</td><td nowrap align="Left" style="width:107px;color:#FFFFFF;font-weight:bold;background-color:#000000;">&nbsp;Vacancy 
+Loss-Down</td><td nowrap align="Left" style="width:107px;color:#FFFFFF;font-weight:bold;background-color:#000000;">&nbsp;Vacancy 
+Loss-Model</td>
+    </tr>
+    <tr id="TableWriter1_Row6" onclick="onClick=RowClick(this) ">
+        <td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;"><a href="javascript:DrillDown('../pages/GlJournalBatch.aspx?&amp;Id=1300333895')" style="text-decoration:None;">&nbsp;333895</a></td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;"><a href="javascript:DrillDown('../pages/GlJournal.aspx?&amp;Id=1001156228')" style="text-decoration:None;">&nbsp;1156228</a></td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;10/31/2021</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;10/01/2021</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;64044</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;Both</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;Unposted</td><td nowrap align="Right" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">1,044,558.00&nbsp;</td><td nowrap align="Right" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">-33,288.00&nbsp;</td><td nowrap align="Right" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">0.00&nbsp;</td><td nowrap align="Right" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">-910,710.00&nbsp;</td><td nowrap align="Right" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">-94,797.00&nbsp;</td><td nowrap align="Right" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">-5,763.00&nbsp;</td>
+    </tr>
+    <tr id="TableWriter1_Row7 " onclick="onClick=RowClick(this) ">
+        <td nowrap align="Left" style="color:#000000;font-weight:bold;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;</td><td nowrap align="Left" style="color:#000000;font-weight:bold;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;">&nbsp;</td><td nowrap align="Left" style="color:#000000;font-weight:bold;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;">&nbsp;</td><td nowrap align="Left" style="color:#000000;font-weight:bold;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;">&nbsp;</td><td nowrap align="Left" style="color:#000000;font-weight:bold;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;">&nbsp;</td><td nowrap align="Left" style="color:#000000;font-weight:bold;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;">&nbsp;</td><td nowrap align="Left" style="color:#000000;font-weight:bold;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;">&nbsp;</td><td nowrap align="Right" style="color:#000000;font-weight:bold;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;">1,044,558.00&nbsp;</td><td nowrap align="Right" style="color:#000000;font-weight:bold;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;">-33,288.00&nbsp;</td><td nowrap align="Right" style="color:#000000;font-weight:bold;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;">0.00&nbsp;</td><td nowrap align="Right" style="color:#000000;font-weight:bold;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;">-910,710.00&nbsp;</td><td nowrap align="Right" style="color:#000000;font-weight:bold;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;">-94,797.00&nbsp;</td><td nowrap align="Right" style="color:#000000;font-weight:bold;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;">-5,763.00&nbsp;</td>
+    </tr>
+    <tr id="TableWriter1_Row8" onclick="onClick=RowClick(this) ">
+        <td nowrap align="Center" colspan="13" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;"></td>
+    </tr>
+    <tr id="TableWriter1_Row9" onclick="onClick=RowClick(this) ">
+        <td nowrap align="Left" style="color:#FFFFFF;font-weight:bold;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;background-color:#000000;">&nbsp;Batch</td><td nowrap align="Left" style="color:#FFFFFF;font-weight:bold;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;background-color:#000000;">&nbsp;Ctrl</td><td nowrap align="Left" style="color:#FFFFFF;font-weight:bold;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;background-color:#000000;">&nbsp;Trans&nbsp;Id</td><td nowrap align="Left" style="color:#FFFFFF;font-weight:bold;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;background-color:#000000;">&nbsp;Property</td><td nowrap align="Left" style="color:#FFFFFF;font-weight:bold;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;background-color:#000000;">&nbsp;Acct&nbsp;Code</td><td nowrap align="Left" style="color:#FFFFFF;font-weight:bold;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;background-color:#000000;">&nbsp;Desc</td><td nowrap align="Left" style="color:#FFFFFF;font-weight:bold;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;background-color:#000000;">&nbsp;Date
+Created</td><td nowrap align="Left" style="color:#FFFFFF;font-weight:bold;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;background-color:#000000;">&nbsp;Post&nbsp;Month</td><td nowrap align="Left" style="color:#FFFFFF;font-weight:bold;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;background-color:#000000;">&nbsp;Book</td><td nowrap align="Left" style="color:#FFFFFF;font-weight:bold;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;background-color:#000000;">&nbsp;Status</td><td nowrap align="Left" style="color:#FFFFFF;font-weight:bold;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;background-color:#000000;">&nbsp;Debit</td><td nowrap align="Left" style="color:#FFFFFF;font-weight:bold;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;background-color:#000000;">&nbsp;Credit</td><td nowrap align="Left" style="color:#FFFFFF;font-weight:bold;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;background-color:#000000;">&nbsp;Batch&nbsp;Full</td>
+    </tr>
+    <tr id="TableWriter1_Row10" onclick="onClick=RowClick(this) ">
+        <td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;333895</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;1156228</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;1001156228</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;64044&nbsp;&nbsp;&nbsp;</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;4021.00000</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;Gross&nbsp;Rental&nbsp;Income</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;09/16/2021</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;10/01/2021</td><td nowrap align="Right" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">Both&nbsp;</td><td nowrap align="Right" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">Unposted&nbsp;</td><td nowrap align="Right" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">0.00&nbsp;</td><td nowrap align="Right" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">1,044,558.00&nbsp;</td><td nowrap align="Right" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">1,300,333,895.00&nbsp;</td>
+    </tr>
+    <tr id="TableWriter1_Row11" onclick="onClick=RowClick(this) ">
+        <td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;333895</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;1156228</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;1001156228</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;64044&nbsp;&nbsp;&nbsp;</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;4024.00000</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;Loss&nbsp;to&nbsp;Old&nbsp;Lease</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;09/16/2021</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;10/01/2021</td><td nowrap align="Right" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">Both&nbsp;</td><td nowrap align="Right" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">Unposted&nbsp;</td><td nowrap align="Right" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">33,288.00&nbsp;</td><td nowrap align="Right" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">0.00&nbsp;</td><td nowrap align="Right" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">1,300,333,895.00&nbsp;</td>
+    </tr>
+    <tr id="TableWriter1_Row12" onclick="onClick=RowClick(this) ">
+        <td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;333895</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;1156228</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;1001156228</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;64044&nbsp;&nbsp;&nbsp;</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;4031.00000</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;Vacancy&nbsp;Loss-Current</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;09/16/2021</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;10/01/2021</td><td nowrap align="Right" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">Both&nbsp;</td><td nowrap align="Right" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">Unposted&nbsp;</td><td nowrap align="Right" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">910,710.00&nbsp;</td><td nowrap align="Right" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">0.00&nbsp;</td><td nowrap align="Right" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">1,300,333,895.00&nbsp;</td>
+    </tr>
+    <tr id="TableWriter1_Row13">
+        <td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;333895</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;1156228</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;1001156228</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;64044&nbsp;&nbsp;&nbsp;</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;4033.00000</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;Vacancy&nbsp;Loss-Down&nbsp;Units</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;09/16/2021</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;10/01/2021</td><td nowrap align="Right" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">Both&nbsp;</td><td nowrap align="Right" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">Unposted&nbsp;</td><td nowrap align="Right" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">94,797.00&nbsp;</td><td nowrap align="Right" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">0.00&nbsp;</td><td nowrap align="Right" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">1,300,333,895.00&nbsp;</td>
+    </tr>
+    <tr id="TableWriter1_Row14" onclick="onClick=RowClick(this) ">
+        <td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;333895</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;1156228</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;1001156228</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;64044&nbsp;&nbsp;&nbsp;</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;4034.00000</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;Vacancy&nbsp;Loss-Model</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;09/16/2021</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;10/01/2021</td><td nowrap align="Right" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">Both&nbsp;</td><td nowrap align="Right" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">Unposted&nbsp;</td><td nowrap align="Right" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">5,763.00&nbsp;</td><td nowrap align="Right" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">0.00&nbsp;</td><td nowrap align="Right" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">1,300,333,895.00&nbsp;</td>
+    </tr>
+    <tr id="TableWriter1_Row15" onclick="onClick=RowClick(this) ">
+        <td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-left-width:1;border-left-style:solid;border-left-color:#CCCCCC;">&nbsp;</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;">&nbsp;</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;">&nbsp;</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;">&nbsp;</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;">&nbsp;</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;">&nbsp;</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;">&nbsp;</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;">&nbsp;</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;">&nbsp;</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;">&nbsp;</td><td nowrap align="Right" style="color:#000000;font-weight:bold;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;">1,044,558.00&nbsp;</td><td nowrap align="Right" style="color:#000000;font-weight:bold;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;">1,044,558.00&nbsp;</td><td nowrap align="Left" style="color:#000000;border-bottom-width:1;border-bottom-style:solid;border-bottom-color:#CCCCCC;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;border-right-width:1;border-right-style:solid;border-right-color:#CCCCCC;">&nbsp;</td>
+    </tr>
+    <tr id="TableWriter1_Row16" onclick="onClick=RowClick(this) ">
+        <td nowrap align="Left" style="color:#000000;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;">&nbsp;</td><td nowrap align="Left" style="color:#000000;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;">&nbsp;</td><td nowrap align="Left" style="color:#000000;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;">&nbsp;</td><td nowrap align="Left" style="color:#000000;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;">&nbsp;</td><td nowrap align="Left" style="color:#000000;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;">&nbsp;</td><td nowrap align="Left" style="color:#000000;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;">&nbsp;</td><td nowrap align="Left" style="color:#000000;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;">&nbsp;</td><td nowrap align="Left" style="color:#000000;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;">&nbsp;</td><td nowrap align="Left" style="color:#000000;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;">&nbsp;</td><td nowrap align="Left" style="color:#000000;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;">&nbsp;</td><td nowrap align="Left" style="color:#000000;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;">&nbsp;</td><td nowrap align="Left" style="color:#000000;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;">&nbsp;</td><td nowrap align="Left" style="color:#000000;border-top-width:1;border-top-style:solid;border-top-color:#CCCCCC;">&nbsp;</td>
+    </tr>
+
+</table>
+</div></span>
+</div></div>
+          
+ </div>
+
+<input name="YSRQuerystringCodes:TextBox" type="text" value="LMHGPRJE" id="YSRQuerystringCodes_TextBox" tabindex="1" class="Inp" isChanged="false" mandatory="false" onChange="gotChange2(this);" style="width:0px;LEFT:0px;TOP:60px;POSITION:absolute;" />    
+
+<input name="BDATACHANGED" type="hidden" id="BDATACHANGED" style="WIDTH: 0px" value="1" />
+<input name="bSaveData" type="hidden" id="bSaveData" style="WIDTH: 0px" />
+<input name="WEBSHARENAME" type="hidden" id="WEBSHARENAME" style="WIDTH: 0px" value="/3005lpcmil" />
+<input name="DigitalSignatureSetupId" type="hidden" id="DigitalSignatureSetupId" style="WIDTH: 0px" value="0" />
+<input name="isHideFilter" type="hidden" id="isHideFilter" style="WIDTH: 0px" />
+<input name="OutputType" type="hidden" id="OutputType" style="WIDTH: 0px" />
+<input name="Hidden1" type="hidden" id="Hidden1" style="WIDTH: 0px" />
+<input name="PreviewHistotyId" type="hidden" id="PreviewHistotyId" style="WIDTH: 0px" />
+<input name="txtCheckBoxValues:TextBox" type="text" id="txtCheckBoxValues_TextBox" tabindex="1" class="Inp" isChanged="false" onChange="gotChange2(this);" style="width:0px;LEFT:0px;TOP:0px;POSITION:absolute;" />
+  <input name="BSAVE" type="hidden" value="" id="BSAVE" /><input name="bDevMode" type="hidden" id="bDevMode" value="false" /><input name="IsEditMode" type="hidden" id="IsEditMode" value="false" /><input name="RequestAction" type="hidden" id="RequestAction" value="NoAction" />
+<div class="aspNetHidden">
+
+<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/ZrhQpsOMyLl622WkCx/4pShSrLgZ9QZryrlanqTYJyIkWefaHnVtbjAANvJ67Mcj/YcUz/ONW5g9RFFGJnjDpfszvgbR4iGL7NvI7+mw3LYyIqDA143kwIe6VLafB5oPWfZVAWE6ymiNhAlP/0Nbg/YGrtQTy1VXaDLJBReJOeTmEVfWSfp6iBddfXGPjd1QdPtqRkXUFZ/WsBhwBq+gaViAvMnkQN3jz2ZX9fln1te0onrwebz3moY6vtvo26TmCeMHE70WismLEAj5sQev9MDv4hTfVsNRCpDUOCZhJI5gp9GzoBvJNk5A/KdC7Fi3Jrn5kvVYpuo/UH2rjW6lSHIFMv8QOL+NAH0EkC6qpiqzLeWkDsZIvU+CmoR/nZFmN0QtXJfDEenyuEGdG7oKCVeWPRA7+fzoEbab5a3HmEu5L8XYCDLoc54/g6Q/s55H+jxLDlkyYWTxez+ppZV4RGPYrfCkuciV6Hh8jTguWYC/JVR2efqI6imw+DWaiCMSaSgV0KfZm5XO5gQfRXtmGe06uYIYgshXDL6VCSSnpBS0eq1F5s6y4NoQVTh8O2NDb7LcW3Tg0bTsL9pTpxmNagNQghdU7g4R0B3meLuKLC9l3vhjzMxPjrTHMoKF509kYm/wmdm97iLr7wUfTP0rEKbANZ9FwTum6ej/MzE9RI=" />
+</div></form>
+<DIV id="DefaultTimeoutDialog" Title="Page Expiration Warning"><P></P></DIV><div id="DefaultProgressbar" name="DefaultProgressbar" class="progressbarOuter" style="position:absolute;visibility:hidden;" showprogressbar='true'><div id="DefaultProgressbar_Caption" name="DefaultProgressbar:Caption" class="progressbarCaption">Please Wait</div><img id="DefaultProgressbar_Image" name="DefaultProgressbar:Image" class="progressbarImage" src="/images/progressbar.gif"></div></body>
+</HTML>
+
+
+<script language="JavaScript" type="text/javascript">
+
+attachEventHandler(window, "onload", InitPage);
+
+function InitPage() {
+HiLite();
+}
+
+function ColumnClick(thiscol) {
+return;
+
+ 
+alert("thiscol=" + thiscol);
+alert("id=" + thiscol.id);
+alert("style=" + thiscol.style);
+alert("bkg1=" + thiscol.style.background);
+ 
+thiscol.style.background = "#ffcccc";
+thiscol.style.foreground = "#ccccff";
+}
+
+function RowClick(thisrow) {// User clicked somewhere on a line.  Highlight the line in pink, and remember which row we are on.
+document.getElementById("GoToRow_TextBox").value = thisrow.id;
+HiLite();
+}
+
+function HiLite() {// Turn the row pink, and also set the focus so that the line is visible.
+var sGoto;
+
+sGoto = document.getElementById("GoToRow_TextBox").value;
+if (sGoto.length == 0) return;
+HiLiteO(document.getElementById(sGoto));
+HiLiteO(document.getElementById("mainTableRow_" + sGoto));  // Thus yclept within the FCT scrolling DIV
+Focus(sGoto);
+}
+
+function HiLiteO(oRow) {// Highlight the indicated row, after un-highlighting the previously highlighted row.
+if (oRow == null) return;
+if (typeof (oOldRow) != "undefined")
+    oOldRow.style.background = "#ffffff";
+oRow.style.background = "#ffcccc";
+oOldRow = oRow;
+}
+function Focus(sRow) {//Set the "focus" on the line.  This causes the screen to scroll such that the line is visible.
+PreFocus(sRow);
+document.getElementById(sRow).childNodes[1].focus();
+}
+
+function PreFocus(sRow) {// Temporarily scroll the focus to a line a little further down.
+// If we don't do this, the pink line will be at the extreme bottom of the screen.
+var sNum, sFull, i, kar, iNum, objRow;
+
+for (i = sRow.length; sRow.substring(i - 1, i) >= '0' && sRow.substring(i - 1, i) <= '9'; i--);
+sNum = sRow.substring(i, sRow.length);
+iNum = sNum;
+ 
+iNum++; iNum++; iNum++;   
+for (iNum = iNum; iNum > sNum; iNum--) {
+    sFull = sRow.substring(0, i) + iNum;
+    objRow = document.getElementById(sFull);
+    if (objRow) {
+        objRow.childNodes[1].focus();
+        return;
+    }
+}
+}
+
+
+</script>
+<script language="javascript" type="text/javascript">
+if (!$) { $ = window.jQuery; }
+
+$(document).ready(function () {
+//TR # 444591 - Defect # 107350 - null displayed on screen
+var sHTML = $("#DivExportLink").html();
+
+if (!($("#DivReport").html() == null))
+    sHTML = sHTML + $("#DivReport").html();
+
+$("#EnvOptionsDiv1_DivReport1").html(sHTML);
+$("#DivExportLink").html("");
+$("#DivReport").html("");
+
+if ($("#EnvOptionsDiv1_DivReport1").val() == "" && $("#EnvOptionsDiv1_ReportFilterDiv_ReportFilterPanel").text().trim() == "") {
+    $("#EnvOptionsDiv1_expanderSign").text("+");
+} else if ($("#EnvOptionsDiv1_DivReport1").val() == "") {
+    $("#EnvOptionsDiv1_expanderSign").text("-");
+} else {
+    $("#EnvOptionsDiv1_expanderSign").text($("#EnvOptionsDiv1:ReportFilterDiv_expanderSign").text);
+}
+
+$('input[lookupclass$=".ysiUserDefinedLookup"]').each(function () {
+    var controlNumber = $(this)[0].id.substring(34, $(this)[0].id.lastIndexOf("_"));
+    var myparents = '';
+    var myparenttypes = '';
+
+    if ($(this).attr("myparents")) {
+        myparents = $(this).attr("myparents");
+        myparenttypes = $(this).attr("myparenttypes");                
+
+        // Additional code for New Generate Screen
+        var myparentSplit = myparents.split("^");
+        myparents = '';
+        $.each(myparentSplit, function (number) {
+            myparents = myparents + "EnvOptionsDiv1:ReportFilterDiv:" + myparentSplit[number] + "^";
+        });
+        // Additional code for New Generate Screen
+    }
+
+    $(this).closest("td").append("<input name='Ysi" + controlNumber + "$TargetId' type='hidden' id='Ysi" + controlNumber + "_TargetId' value='Ysi" + controlNumber + "_'>")
+
+    $(this).attr("myparents", myparents + 'Ysi' + controlNumber + '_TargetId^');
+    $(this).attr("myparenttypes", myparenttypes + 'TargetId^');
+});
+
+var CheckBoxNames = $("#EnvOptionsDiv1_ReportFilterDiv_checkBoxCheck_TextBox").val();
+
+
+//--------------------Setting Report Filter Dynamic Height--------------------              
+var MaxHeight;
+
+if ($("#isHideFilter").val() == "true") {
+    $("#EnvOptionsDiv1_expanderHead").css("display", "none");
+    
+    /* TR # 495868 -  new generate page distortion issue*/
+    if ($("#OutputType").val().toUpperCase() == "SCREEN")
+        $("#EnvOptionsDiv1_DivReport1").css("padding-top", "80px");
+}else{
+    // Getting maximum height of the three panels
+    if (($("#EnvOptionsDiv1_ReportFilterDiv_Panel1")[0].scrollHeight > $("#EnvOptionsDiv1_ReportFilterDiv_Panel2")[0].scrollHeight) && ($("#EnvOptionsDiv1_ReportFilterDiv_Panel1")[0].scrollHeight > $("#EnvOptionsDiv1_ReportFilterDiv_Panel4")[0].scrollHeight)) {
+        MaxHeight = parseInt($("#EnvOptionsDiv1_ReportFilterDiv_Panel1")[0].scrollHeight);
+    } else if (($("#EnvOptionsDiv1_ReportFilterDiv_Panel2")[0].scrollHeight > $("#EnvOptionsDiv1_ReportFilterDiv_Panel4")[0].scrollHeight)) {
+        MaxHeight = parseInt($("#EnvOptionsDiv1_ReportFilterDiv_Panel2")[0].scrollHeight);
+    } else {
+        MaxHeight = parseInt($("#EnvOptionsDiv1_ReportFilterDiv_Panel4")[0].scrollHeight);
+    }
+
+}        
+
+jQuery.data(jQuery(jQuery('span[id="EnvOptionsDiv1:ReportFilterDiv_expanderSign"]'))[0], "height").first = (MaxHeight + 50) + ""
+$("#EnvOptionsDiv1_ReportFilterDiv_ReportFilterPanel").css("height", MaxHeight + 20);
+
+$("#EnvOptionsDiv1_DivReport1").css("visibility", "visible");
+CollapseDiv("EnvOptionsDiv1:ReportFilterDiv", "CustomCorrespGenerate");
+CollapseDiv("EnvOptionsDiv1:AdvancedYSRSettings", "CustomCorrespGenerate");
+if ($("#EnvOptionsDiv1_DivReport1 Div").text().replace(/\s/g, '') == "" && $("#EnvOptionsDiv1_ReportFilterDiv_ReportFilterPanel").text().replace(/\s/g, '') != "") {
+    // Expand Report Filter only when report is not generated
+    ExpandDiv("EnvOptionsDiv1:ReportFilterDiv", "CustomCorrespGenerate");
+    //ExpandDiv("EnvOptionsDiv1:AdvancedYSRSettings", "CustomCorrespGenerate");
+    $("EnvOptionsDiv1: YsiDiv1_expanderContent").css("display", "none");
+}
+//--------------------Setting Report Filter Dynamic Height--------------------
+
+
+
+//CheckBox Filter Value assignment
+var FilterCheckBoxNames = $("#txtCheckBoxValues_TextBox").val().split("^");
+var i;
+
+for (i = 0; i < FilterCheckBoxNames.length; i++) {
+    $("#" + FilterCheckBoxNames[i]).attr("checked", "checked");
+}
+//CheckBox Filter Value assignment
+
+// Expand accordion if it is in close state and focus is on control inside it 
+$("#EnvOptionsDiv1_AdvancedYSRSettings_Panel5").focusin(function () {
+    ExpandDiv("EnvOptionsDiv1:AdvancedYSRSettings", "CustomCorrespGenerate");
+});
+
+$("#EnvOptionsDiv1_ReportFilterDiv_ReportFilterPanel").focusin(function () {
+    ExpandDiv("EnvOptionsDiv1:ReportFilterDiv", "CustomCorrespGenerate");
+});
+// Expand accordion if it is in close state and focus is on control inside it
+
+//Set left
+$("#EnvOptionsDiv1_ReportFilterDiv_ReportFilterPanel div[class*='left']").each(function () {
+    $(this).css("left", $(this).attr("class").replace("left", "px"));
+});
+
+//Align img top for time and date fields
+$("#EnvOptionsDiv1_ReportFilterDiv_ReportFilterPanel img[src*='calendar']").css("top", "2px");
+$("#EnvOptionsDiv1_ReportFilterDiv_ReportFilterPanel img[src*='timer']").css("top", "4px");
+
+//Aligning checkbox with other controls
+$("#EnvOptionsDiv1_ReportFilterDiv_ReportFilterPanel").find(":checkbox").css("margin", "3px 3px 3px 0px");
+//Aligning checkbox with other controls
+
+
+//Disable 
+$(".disabled").attr("disabled", "disabled");
+//Disable
+
+// FireFox wrap issue
+if ($.browser.mozilla) {
+    $("#EnvOptionsDiv1_DivReport1 td").css("white-space", "pre-wrap");
+}
+
+if ($.browser.webkit) {
+    $("#EnvOptionsDiv1_DivReport1 td").css("white-space", "pre-wrap");
+}
+
+// For correct tab sequence 
+$(":input").each(function (i) { $(this).attr('tabindex', 1); });
+// For correct tab sequence                
+$("#myTab").css("position", "");
+
+
+
+//Append ysiDiv names to myparents attributes of child lookup
+var Parents;
+var myParentsString;
+$("[name^='EnvOptionsDiv1:ReportFilterDiv:'][myparents]").each(function () {
+    if ($(this).attr("lookupclass").indexOf("ysiUserDefinedLookup") ==-1) {
+        myParentsString = "";
+        Parents = $(this).attr("myparents").split("^");
+        $.each(Parents, function (i) {
+            if (Parents[i]) {
+                myParentsString = myParentsString + "EnvOptionsDiv1:ReportFilterDiv:" + Parents[i] + "^";
+            }
+        });
+        myParentsString = myParentsString + "EnvOptionsDiv1:ReportFilterDiv:^" + $(this).attr("name").split(":")[2] + "_TargetId^"
+        $(this).attr("myparents", myParentsString);
+    }
+});
+
+});
+</script>
