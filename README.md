@@ -2,5 +2,5 @@
 
 ```bash
 npm i
-http-server
+npm run start
 ```
